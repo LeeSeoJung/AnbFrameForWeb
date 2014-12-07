@@ -37,6 +37,15 @@ public class UserController {
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/user_all_g", method=RequestMethod.GET)
+	public List getUserAllGET() throws Exception{
+
+		List list = service.selectUser(new AnbUser());
+
+		return list;
+	}
+	
 	
 	@RequestMapping(value="/home_sjh", method=RequestMethod.GET)
 	public String getSJH() throws Exception{
@@ -58,12 +67,11 @@ public class UserController {
 		return "test_khj";
 	}
 	
-	@ResponseBody
-	@RequestMapping(value="/user_insert_sjh", method=RequestMethod.POST)
-	public Map insertUserSJH(@RequestParam(value="userId") String userId,@RequestParam(value="userName") String userName,
-			@RequestParam(value="userGender") String userGender,@RequestParam(value="userBirth") String userBirth) {
 	
-		Map<String,String> map = new HashMap<String,String>();
+	@RequestMapping(value="/user_insert_sjh", method=RequestMethod.POST)
+	public void insertUserSJH(@RequestParam(value="userId") String userId,@RequestParam(value="userName") String userName,
+			@RequestParam(value="userGender") String userGender,@RequestParam(value="userBirth") String userBirth) throws Exception{
+	
 		LOG.info("{}", userId +" || "+userName+" || "+userGender+" || "+userBirth);
 		AnbUser vo = new AnbUser();
 		vo.setUserId(userId);
@@ -76,41 +84,18 @@ public class UserController {
 		
 		vo.setUserBirth(null);
 		
-		
-		String msg = "";
-		String key = "";
-		try{
-			service.saveOrUpdateUser(vo);
-			msg = "성공적으로 등록되었습니다.";
-			key = "success";
-		}catch(Exception e){
-			msg = e.getLocalizedMessage();
-			key = "error";
-		}
-		
-		map.put(key, msg);
-		
-		return map;
+		service.saveOrUpdateUser(vo);	
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/user_delete_sjh", method=RequestMethod.POST)
-	public Map deleteUserSJH(@RequestParam(value="userId")String userId) {
+	public Map deleteUserSJH(@RequestParam(value="userId")String userId) throws Exception {
 		Map<String,String> map = new HashMap<String,String>();
 		AnbUser vo = new AnbUser();
 		vo.setUserId(userId);
-		String msg = "";
-		String key = "";
-		try{
-			service.removeUser(vo);
-			msg = "성공적으로 삭제되었습니다.";
-			key = "success";
-		}catch(Exception e){
-			msg = e.getLocalizedMessage();
-			key = "error";
-		}
+		service.removeUser(vo);
 		
-		map.put(key, msg);
+		map.put("success", "성공적으로 삭제되었습니다.");
 		
 		return map;
 	}

@@ -84,7 +84,7 @@
                 },
                 success: function(result){
                     var result = eval('('+result+')');
-                    if (result.error){
+                    if (result.errorMsg){
                         $.messager.show({
                             title: 'Error',
                             msg: result.errorMsg
@@ -92,10 +92,6 @@
                     } else {
                         $('#dlg').dialog('close');        // close the dialog
                         $('#dg').datagrid('reload');    // reload the user data
-                        $.messager.show({    // show error message
-                            title: '성공',
-                            msg: result.success
-                        });
                     }
                 }
             });
@@ -119,7 +115,7 @@
                             } else {
                                 $.messager.show({    // show error message
                                     title: 'Error',
-                                    msg: result.error
+                                    msg: result.errorMsg
                                 });
                             }
                         },'json');
